@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("room/")
-@Api(value = "聊天室模块", tags = "聊天室模块", description = "聊天室模块")
+@Api(value = "聊天室模块", tags = "聊天室模块", description = "接口")
 public class RoomController extends BaseCRUDController {
 
     @Autowired

@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("user/")
-@Api(value = "用户模块", tags = "用户模块", description = "用户模块")
+@Api(value = "用户模块", tags = "用户模块", description = "接口")
 public class UserController extends BaseCRUDController {
 
     @Autowired
