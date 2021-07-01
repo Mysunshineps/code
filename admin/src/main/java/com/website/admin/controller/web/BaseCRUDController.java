@@ -475,4 +475,35 @@ public abstract class BaseCRUDController<T extends Serializable> extends Abstarc
         }
         return ip;
     }
+
+    /**
+     * 分页
+     * @param pageNum
+     * @param pageSize
+     */
+    public void doPages(Integer pageNum,Integer pageSize){
+        if (pageNum == null || pageNum < 1){
+            pageNum = 1;
+        }
+        if (pageSize == null || pageSize < 1){
+            pageSize = 15;
+        }
+        PageHelper.startPage(pageNum,pageSize,true);
+    }
+
+    /**
+     * 返回参数
+     * @param dataList
+     * @return
+     */
+    public Map<String,Object> doPageReturn(List dataList){
+        PageInfo pageInfo = new PageInfo<>(dataList);
+        JSONObject object = new JSONObject();
+        object.put("Data", dataList);
+        object.put("TotalCount", pageInfo.getTotal());
+        object.put("PageSize", pageInfo.getPageSize());
+        object.put("pages", pageInfo.getPages());
+        object.put("CurrentPage", pageInfo.getPageNum());
+        return object;
+    }
 }

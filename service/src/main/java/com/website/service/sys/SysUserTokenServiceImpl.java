@@ -1,6 +1,5 @@
 package com.website.service.sys;
 
-import com.website.mapper.SysUserTokenMapper;
 import com.website.model.SysUserToken;
 import com.website.model.User;
 import com.website.service.BaseService;
@@ -18,9 +17,6 @@ import java.util.Date;
  */
 @Service
 public class SysUserTokenServiceImpl extends BaseService<SysUserToken> implements SysUserTokenService {
-
-    @Autowired
-    private SysUserTokenMapper sysUserTokenMapper;
 
     @Autowired
     private UserService userService;

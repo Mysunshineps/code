@@ -1,10 +1,15 @@
 package com.website.core;
 
+/**
+ * @Description 状态码
+ * @Author psq
+ * @Date 2021/6/1/15:22
+ */
 public interface HttpCode {
 
     String SUCCESS = "200";
 
-    String ERROR = "500";
+    String ERROR = "400";
 
     /**
      * 业务异常
@@ -23,11 +28,6 @@ public interface HttpCode {
      * 没有对应权限
      */
     String NO_AUTH = "506";
-
-    /**
-     * 活动结束，有已经支付的订单
-     */
-    String HAVA_ORDER = "507";
 
     /**
      * token失效状态码

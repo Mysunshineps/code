@@ -1,6 +1,7 @@
 package com.website.admin.config;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.RequestHandler;
@@ -34,6 +35,7 @@ public class Swagger2Config {
                 // RequestHandlerSelectors.basePackage("com.info.*");// 指定包位置
 //                .apis(handlerPredicate)
                 .apis(RequestHandlerSelectors.any())
+                .paths(Predicates.not(PathSelectors.regex("/error.*")))
                 .paths(PathSelectors.any())
                 .build();
     }

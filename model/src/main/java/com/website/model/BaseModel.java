@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSON;
 import java.io.Serializable;
 
 /**
- *
+ * 基础类
  * @author psq
  */
 public class BaseModel implements Serializable {

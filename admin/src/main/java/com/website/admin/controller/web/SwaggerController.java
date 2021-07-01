@@ -34,37 +34,6 @@ public class SwaggerController extends BaseCRUDController {
     }
 
     /**
-     * 分页
-     * @param pageNum
-     * @param pageSize
-     */
-    private void doPages(Integer pageNum,Integer pageSize){
-        if (pageNum == null || pageNum < 1){
-            pageNum = 1;
-        }
-        if (pageSize == null || pageSize < 1){
-            pageSize = 15;
-        }
-        PageHelper.startPage(pageNum,pageSize,true);
-    }
-
-    /**
-     * 返回参数
-     * @param dataList
-     * @return
-     */
-    private Map<String,Object> doPageReturn(List dataList){
-        PageInfo pageInfo = new PageInfo<>(dataList);
-        JSONObject object = new JSONObject();
-        object.put("Data", dataList);
-        object.put("TotalCount", pageInfo.getTotal());
-        object.put("PageSize", pageInfo.getPageSize());
-        object.put("pages", pageInfo.getPages());
-        object.put("CurrentPage", pageInfo.getPageNum());
-        return object;
-    }
-
-    /**
      * 门店列表
      */
     @ApiOperation(value = "门店列表", httpMethod = "GET", notes = "商城门店不区分店铺和门店，只有门店概念（机构代码和门店Id代表同一个门店）", response = AjaxResponse.class)

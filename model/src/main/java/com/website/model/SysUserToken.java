@@ -6,8 +6,9 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * 系统用户token白名单
- * @author psq
+ * @Description 系统用户token白名单
+ * @Author psq
+ * @Date 2021/7/1/15:22
  */
 @Repository
 @Table(name = "sys_user_token")
