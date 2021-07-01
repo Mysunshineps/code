@@ -1,0 +1,55 @@
+server:
+  port: 80
+  # 服务器域名
+  hostURL:
+spring:
+  application:
+    name: 聊天室服务
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/code?autoReconnect=true&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
+
+
+##redis
+#redis:
+#  prefix: chatRoom
+#  cache:
+#    key-prefix: chatRoom_
+#  # Redis数据库索引（默认为0）
+#  database: 0
+#  # redis 集群节点
+#  cluster:
+#    nodes:
+#
+#  #密码
+#  password:
+#  #端口
+#  port: 6379
+
+
+##上传文件后缀
+#file:
+#  suffix: png
+#
+#management:
+#  endpoint:
+#    health:
+#      show-details: always
+#  health:
+#    elasticsearch:
+#      enabled: false
+#  endpoints:
+#    enabled: false
+#    health:
+#      enabled: true
+
+mybatis:
+  type-aliases-package: com.website.model
+  mapper-locations: classpath:mapper/*.xml
+
+mapper:
+  mappers: com.website.core.BaseMapper
+  not-empty: false
+  identity: MYSQL
