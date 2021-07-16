@@ -8,7 +8,7 @@ var platNo;
 function getLoginUser() {
     $.ajax({
         type: "get",
-        url: "/admin/login/session/info",
+        url: "/admin/user/info",
         cache:false,
         dataType: "json",
         success: function (result) {

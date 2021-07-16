@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date 2021/7/2/11:26
  */
 @RestController
-@RequestMapping("message/")
+@RequestMapping("/admin/message/")
 @Api(value = "聊天室",tags = "聊天室",description = "接口")
 public class MessageController extends BaseCRUDController {
 

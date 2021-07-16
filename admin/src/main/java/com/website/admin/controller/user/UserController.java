@@ -1,6 +1,7 @@
 package com.website.admin.controller.user;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.website.admin.controller.web.BaseCRUDController;
 import com.website.core.AjaxResponse;
 import com.website.core.LoginRequest;
@@ -11,9 +12,11 @@ import com.website.admin.utils.JWTUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +28,7 @@ import java.util.Map;
  * @Version:        1.0
  */
 @RestController
-@RequestMapping("user/")
+@RequestMapping("/admin/user/")
 @Api(value = "用户模块", tags = "用户模块", description = "接口")
 public class UserController extends BaseCRUDController {
 
@@ -37,7 +40,7 @@ public class UserController extends BaseCRUDController {
 
     /**
      * 用户注册
-     * @param userName 用户账号
+     * @param username 用户账号
      * @param password 用户密码
      * @param firstName 姓
      * @param lastName 名
@@ -47,27 +50,35 @@ public class UserController extends BaseCRUDController {
      */
     @ApiOperation(value = "用户注册", httpMethod = "POST", notes = "用户注册", response = AjaxResponse.class)
     @RequestMapping(value = "/register",method = RequestMethod.POST)
-    public AjaxResponse login(@ApiParam(value = "userName", name = "用户账号", required = true) @RequestParam String userName,
+    public AjaxResponse login(@ApiParam(value = "username", name = "用户账号", required = true) @RequestParam String username,
                               @ApiParam(value = "password", name = "用户密码", required = true) @RequestParam String password,
-                              @ApiParam(value = "firstName", name = "姓", required = true) @RequestParam String firstName,
-                              @ApiParam(value = "lastName", name = "名", required = true) @RequestParam String lastName,
-                              @ApiParam(value = "email", name = "邮箱", required = true) @RequestParam String email,
-                              @ApiParam(value = "phone", name = "电话号码", required = true) @RequestParam String phone
+                              @ApiParam(value = "firstName", name = "姓", required = false) @RequestParam(required = false) String firstName,
+                              @ApiParam(value = "lastName", name = "名", required = false) @RequestParam(required = false) String lastName,
+                              @ApiParam(value = "email", name = "邮箱", required = false) @RequestParam(required = false) String email,
+                              @ApiParam(value = "phone", name = "电话号码", required = false) @RequestParam(required = false) String phone
                               ){
         Map<String,Object> params = getParams();
         System.out.println(JSON.toJSONString(params));
         AjaxResponse response = new AjaxResponse();
         User user = new User();
-        user.setUserName(userName);
+        user.setUserName(username);
         List<User> dbUserList = userService.select(user);
         if (null != dbUserList && !dbUserList.isEmpty()){
             return response.gengerateMsgError("该用户名已使用，请重新输入!");
         }
         user.setPassword(password);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setEmail(email);
-        user.setPhone(phone);
+        if (StringUtils.isNotBlank(firstName)){
+            user.setFirstName(firstName);
+        }
+        if (StringUtils.isNotBlank(lastName)){
+            user.setLastName(lastName);
+        }
+        if (StringUtils.isNotBlank(email)){
+            user.setEmail(email);
+        }
+        if (StringUtils.isNotBlank(phone)){
+            user.setPhone(phone);
+        }
         user.setStatus(1);
         user.setCreateTime(new Date());
         userService.insertSelective(user);
@@ -76,27 +87,33 @@ public class UserController extends BaseCRUDController {
 
     /**
      * 用户登录
-     * @param userName 用户账号
+     * @param username 用户账号
      * @param password 用户密码
      * @return
      */
-    @ApiOperation(value = "用户登录", httpMethod = "GET", notes = "用户登录", response = AjaxResponse.class)
-    @RequestMapping(value = "userLogin", method = RequestMethod.GET)
-    public AjaxResponse login(@ApiParam(value = "userName", name = "用户账号", required = true) @RequestParam String userName,
+    @ApiOperation(value = "用户登录", httpMethod = "POST", notes = "用户登录", response = AjaxResponse.class)
+    @RequestMapping(value = "userLogin", method = RequestMethod.POST)
+    public AjaxResponse login(@ApiParam(value = "username", name = "用户账号", required = true) @RequestParam String username,
                               @ApiParam(value = "password", name = "用户密码", required = true) @RequestParam String password){
-        Map<String,Object> params = getParams();
-        System.out.println(JSON.toJSONString(params));
         AjaxResponse res = new AjaxResponse();
         User user = new User();
-        user.setUserName(userName);
+        user.setUserName(username);
         user.setPassword(password);
         user.setStatus(1);
         User dbUser = userService.selectOne(user);
         if(dbUser == null){
             return res.gengerateMsgError("账号或密码不正确");
         }
-        String token = sysUserTokenService.createToken(user);
-        res.success(token);
+        try {
+            String token = sysUserTokenService.createToken(dbUser);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("userName", dbUser.getUserName());
+            jsonObject.put("token", token);
+            res.success(jsonObject);
+        }catch (Exception e){
+            e.printStackTrace();
+            res.gengerateMsgError(e.getMessage());
+        }
         return res;
     }
 
@@ -128,11 +145,19 @@ public class UserController extends BaseCRUDController {
      * @return
      */
     @ApiOperation(value = "获取用户信息", httpMethod = "GET", notes = "获取用户信息", response = AjaxResponse.class)
-    @RequestMapping(value = "user/{userName}", method = RequestMethod.GET)
-    public AjaxResponse login(@ApiParam(value = "userName", name = "用户名", required = true) @PathVariable String userName){
+    @RequestMapping(value = "info/{userName}", method = RequestMethod.GET)
+    public AjaxResponse login(HttpServletRequest request, @ApiParam(value = "userName", name = "用户名", required = false) @PathVariable(required = false) String userName){
         Map<String,Object> params = getParams();
         System.out.println(JSON.toJSONString(params));
         AjaxResponse res = new AjaxResponse();
+        if (StringUtils.isBlank(userName)){
+            Object userId = request.getAttribute("userId");
+            User user = userService.selectByKey(userId);
+            if (null == user || StringUtils.isBlank(user.getUserName())){
+                return res.gengerateMsgError("参数异常!");
+            }
+            userName = user.getUserName();
+        }
         User user = new User();
         user.setUserName(userName);
         user.setStatus(1);
@@ -140,6 +165,7 @@ public class UserController extends BaseCRUDController {
         if(dbUser == null){
             return res.gengerateMsgError("未查到该用户信息!");
         }
+        dbUser.setPassword(null);
         res.success(dbUser);
         return res;
     }

@@ -43,7 +43,6 @@ public class User extends BaseModel {
     /**
      * 密码 忽略掉,隐藏掉需要的字段[@JSONField(serialize = false)]
      */
-    @JSONField(serialize = false)
     private String password;
 
     /**

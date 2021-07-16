@@ -28,7 +28,7 @@ import java.util.Map;
  * @Date 2021/7/1/15:15
  */
 @RestController
-@RequestMapping("room/")
+@RequestMapping("/admin/room/")
 @Api(value = "聊天室模块", tags = "聊天室模块", description = "接口")
 public class RoomController extends BaseCRUDController {
 
