@@ -17,7 +17,9 @@ import tk.mybatis.spring.annotation.MapperScan;
 @MapperScan("com.website.mapper")
 @ComponentScan("com.website")
 public class Application {
-
+     void test(){
+         System.out.println("3213");
+     }
     public static void main(String[] args){
         SpringApplication.run(Application.class, args);
     }
