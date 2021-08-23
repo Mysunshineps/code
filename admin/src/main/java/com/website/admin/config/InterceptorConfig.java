@@ -18,8 +18,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor())
                 .addPathPatterns("/admin/**")
-//                .excludePathPatterns("/admin/user/**","/admin/webSocket/message/**","/index.html/**","/swagger/docs/**","/swagger-ui.html/**","/swagger-resources/**","/v2/**");
-                .excludePathPatterns("/admin/user/**","/admin/webSocket/message/**");
+                .excludePathPatterns("/admin/user/**","/admin/webSocket/message/**","/index.html/**","/swagger/docs/**","/swagger-ui.html/**","/swagger-resources/**","/v2/**");
 
     }
 }

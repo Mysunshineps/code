@@ -1,24 +1,35 @@
 var soketUserName ;
 var soket;
 var soketFalg = false;
-// var soketBaseUrl = "ws://"+location.host+"/admin/webSocket/message";
-var soketBaseUrl = "ws://localhost:8080/admin/webSocket/message";
 var platNo;
-
+var soketBaseUrl = "ws://"+location.host+"/admin/webSocket/message/";
+getProtocol();
+function getProtocol() {
+    var protocol = window.location.protocol.split(':')[0];
+    if (protocol == 'https'){
+        soketBaseUrl =  "wss://"+location.host+"/admin/webSocket/message/"
+    } else {
+        soketBaseUrl =  "ws://"+location.host+"/admin/webSocket/message/"
+    }
+}
+$(function(){
+    getLoginUser();
+})
 function getLoginUser() {
+    var userName = window.localStorage.getItem('userName');
     $.ajax({
         type: "get",
-        url: "/admin/user/info",
+        url: "/admin/user/info/"+userName,
         cache:false,
         dataType: "json",
         success: function (result) {
             if (result && result.code == 200) {
                 var item = result.data;
-                console.log("登录用户",item.username)
-                $("#loginUserName").text(item.username);
+                console.log("登录用户",item.userName)
+                $("#loginUserName").text(item.userName);
                 soketUserName = localStorage.getItem("soketUserName");
                 if (!soketUserName) {
-                    soketUserName = item.username +"-"+ Math.floor(Math.random()*999)+Math.floor(Math.random()*999)
+                    soketUserName = item.userName +"-"+ Math.floor(Math.random()*999)+Math.floor(Math.random()*999)
                     localStorage.setItem("soketUserName",soketUserName);
                 }
                 WebSocketConnect();
@@ -47,7 +58,7 @@ function WebSocketConnect() {
     if ("WebSocket" in window)
     {
         console.log("您的浏览器支持 WebSocket!");
-        soket = new WebSocket(soketBaseUrl + "/" + soketUserName);
+        soket = new WebSocket(soketBaseUrl + soketUserName);
         soket.onopen = function()
         {
             console.log("链接初始化成功...");

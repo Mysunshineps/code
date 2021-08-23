@@ -69,6 +69,7 @@ public class ChatAnnotation {
     public void end() {
         connections.remove(this);
         String message = String.format("* %s %s", nickname, "退出聊天室");
+        System.out.println("在线人数：" + connectionIds.decrementAndGet());
         broadcast(message);
     }
     /**

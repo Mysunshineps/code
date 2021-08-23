@@ -22,9 +22,11 @@ function userRegister() {
         "success": function (res) {
             if (res && res.code == "200") {
                 $("#register").text("注册成功")
-                location.href = "/html/login.html"
+                setTimeout(function () {
+                    location.href = "/html/login.html"
+                },800);
             } else {
-                layer.msg('注册失败!', {icon: 2});
+                layer.msg(res.message, {icon: 2});
             }
         }
     });
